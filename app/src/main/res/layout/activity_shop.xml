@@ -21,7 +21,6 @@
         android:id="@+id/mainLL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Магазин продуктов!"
         android:orientation="horizontal">
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -43,17 +42,23 @@
                 android:id="@+id/productNameET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Название продукта"
+                android:hint="@string/productName"
                 android:textSize="24sp"/>
 
             <EditText
                 android:id="@+id/productPriceET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Цена продукта"
+                android:hint="@string/productPrice"
+                android:textSize="16sp"/>
+
+            <EditText
+                android:id="@+id/productDescriptionET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/productDescription"
                 android:textSize="16sp"/>
         </LinearLayout>
-
     </LinearLayout>
 
     <Button
@@ -73,6 +78,5 @@
         android:layout_height="match_parent"
         app:layout_constraintVertical_bias="1"
         tools:listitem="@layout/list_item"/>
-
 
 </LinearLayout>

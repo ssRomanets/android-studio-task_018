@@ -1,9 +1,10 @@
 package com.example.task_018
 
-import android.graphics.Bitmap
+import java.io.Serializable
 
 class Product (
     val name: String,
     val price: String,
-    val image: Bitmap?
-)
+    val description: String,
+    val image: String
+) : Serializable

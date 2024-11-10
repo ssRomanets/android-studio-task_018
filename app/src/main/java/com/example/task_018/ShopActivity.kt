@@ -2,13 +2,12 @@ package com.example.task_018
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Bitmap
 
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.AdapterView
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -16,20 +15,21 @@ import android.widget.ListView
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import java.io.IOException
 import kotlin.system.exitProcess
 
 class ShopActivity : AppCompatActivity() {
 
     private val GALLERY_REQUEST = 382
-    var bitmap: Bitmap? = null
+    var photoProductUri: Uri? = null
     var products: MutableList<Product> = mutableListOf()
+    var listAdapter: ListAdapter? = null
 
     private lateinit var toolbarMain: Toolbar
 
     private lateinit var listViewLV: ListView
     private lateinit var productNameET: EditText
     private lateinit var productPriceET: EditText
+    private lateinit var productDescriptionET: EditText
     private lateinit var editImageIV: ImageView
     private lateinit var productSaveBTN: Button
 
@@ -51,12 +51,21 @@ class ShopActivity : AppCompatActivity() {
         }
 
         productSaveBTN.setOnClickListener{
-            createPerson()
-            val listAdapter = ListAdapter(this@ShopActivity, products)
+            createProduct()
+            listAdapter = ListAdapter(this@ShopActivity, products)
             listViewLV.adapter = listAdapter
-            listAdapter.notifyDataSetChanged()
+            listAdapter?.notifyDataSetChanged()
             clearEditFields()
+            listAdapter?.notifyDataSetChanged()
         }
+        listViewLV.onItemClickListener =
+            AdapterView.OnItemClickListener{parent, view, position, id ->
+                val product = listAdapter!!.getItem(position)
+
+                val intent = Intent(this, ProductActivity::class.java)
+                intent.putExtra("product", product)
+                startActivity(intent)
+            }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -78,21 +87,24 @@ class ShopActivity : AppCompatActivity() {
         listViewLV = findViewById(R.id.listViewLV)
         productNameET = findViewById(R.id.productNameET)
         productPriceET = findViewById(R.id.productPriceET)
+        productDescriptionET = findViewById(R.id.productDescriptionET)
         editImageIV = findViewById(R.id.editImageIV)
         productSaveBTN = findViewById(R.id.productSaveBTN)
     }
 
-    private fun createPerson() {
+    private fun createProduct() {
         val productName = productNameET.text.toString()
         val productPrice = productPriceET.text.toString()
-        val productImage = bitmap
-        val product = Product(productName, productPrice, productImage)
+        val productDescription = productDescriptionET.text.toString()
+        val productImage = photoProductUri.toString()
+        val product = Product(productName, productPrice, productDescription, productImage)
         products.add(product)
     }
 
     private fun clearEditFields() {
         productNameET.text.clear()
         productPriceET.text.clear()
+        productDescriptionET.text.clear()
         editImageIV.setImageResource(R.drawable.product_ic)
     }
 
@@ -101,16 +113,9 @@ class ShopActivity : AppCompatActivity() {
         editImageIV = findViewById(R.id.editImageIV)
         when (requestedCode) {
             GALLERY_REQUEST -> if (resultCode === RESULT_OK) {
-                val selectedImage: Uri? = data?.data
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedImage)
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-                editImageIV.setImageBitmap(bitmap)
+                photoProductUri = data?.data
+                editImageIV.setImageURI(photoProductUri)
             }
         }
     }
-
-
 }

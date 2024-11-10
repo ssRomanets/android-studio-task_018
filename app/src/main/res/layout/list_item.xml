@@ -33,7 +33,7 @@
                     android:id="@+id/productNameTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint=" Название товара"
+                    android:hint="@string/productName"
                     android:textColor="@color/black"
                     android:textSize="24sp"
                     android:textStyle="bold"/>
@@ -42,7 +42,7 @@
                     android:id="@+id/productPriceTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="Цена товара"
+                    android:hint="@string/productPrice"
                     android:layout_marginTop="6dp"/>
             </LinearLayout>
         </LinearLayout>
